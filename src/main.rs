@@ -4,10 +4,10 @@ use tijori::commands::generate::PasswordGenerator;
 use tijori::commands::Command;
 
 fn main() {
-    let mut command: String;
+    let mut command: String = String::new();
 
     loop {
-        command = String::new();
+        command.clear();
         // read the command
         println!("Enter a command: ");
         io::stdin()
