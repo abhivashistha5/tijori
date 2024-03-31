@@ -1,7 +1,7 @@
-use rand::Rng;
 use std::io;
 
-const PASSWORD_LENGTH: usize = 10;
+use tijori::commands::generate::PasswordGenerator;
+use tijori::commands::Command;
 
 fn main() {
     let mut command: String;
@@ -15,32 +15,27 @@ fn main() {
             .expect("Failed to read command");
 
         // trim the new line character from command
-        command = command.trim().to_string();
-        match command.as_str() {
-            "generate" => println!("{}", generate_password(PASSWORD_LENGTH)),
-            "exit" => break,
-            _ => println!("Unknown command"),
+        let res = handle_command(command.trim());
+        if let Some(output) = res {
+            println!("{}", output);
+        } else {
+            break;
         }
     }
 }
 
-fn generate_password(length: usize) -> String {
-    // Initialize the characters that are valid for the passwords
-    let valid_chars_string =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-!@#$%&(){};?";
-    let mut valid_chars: Vec<String> = Vec::new();
-    for chars in valid_chars_string.chars() {
-        valid_chars.push(chars.to_string());
+fn handle_command(cmd: &str) -> Option<String> {
+    if cmd == "exit" {
+        return None;
     }
 
-    // Randomly select characters
-    let mut rng = rand::thread_rng();
-    let mut password: Vec<String> = Vec::new();
-    let mut random_index: usize;
-    for _ in 0..length {
-        random_index = rng.gen_range(0..valid_chars.len());
-        password.push(valid_chars[random_index].clone());
-    }
+    let execution_result: Result<String, String> = match cmd {
+        "generate" => PasswordGenerator::execute(None),
+        _ => Err(String::from("Unknown command")),
+    };
 
-    return password.join("");
+    match execution_result {
+        Ok(x) => Some(x),
+        Err(x) => Some(format!("Error: {}", x)),
+    }
 }
