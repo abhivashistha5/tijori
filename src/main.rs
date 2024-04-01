@@ -45,7 +45,7 @@ fn handle_command(cmd: &str) -> Option<String> {
 */
 
 #[cfg(test)]
-mod test {
+mod main_test {
     use crate::handle_command;
 
     #[test]

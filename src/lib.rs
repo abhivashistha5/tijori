@@ -6,7 +6,7 @@ pub mod generator;
 */
 
 #[cfg(test)]
-mod tests {
+mod generate_password_lib_tests {
     use crate::generator::password_generator::{self, PASSWORD_LENGTH};
 
     #[test]
