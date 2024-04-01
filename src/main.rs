@@ -39,3 +39,36 @@ fn handle_command(cmd: &str) -> Option<String> {
         Err(x) => Some(format!("Error: {}", x)),
     }
 }
+
+/*
+    tests
+*/
+
+#[cfg(test)]
+mod test {
+    use crate::handle_command;
+
+    #[test]
+    fn test_handle_command_generate() {
+        let execution_result = handle_command("generate");
+        assert!(execution_result.is_some());
+        if let Some(result_val) = execution_result {
+            assert!(!result_val.starts_with("Error"));
+        }
+    }
+
+    #[test]
+    fn test_handle_command_exit() {
+        let execution_result = handle_command("exit");
+        assert!(execution_result.is_none())
+    }
+
+    #[test]
+    fn test_unknown_command() {
+        let execution_result = handle_command("test_command");
+        assert!(execution_result.is_some());
+        if let Some(result_val) = execution_result {
+            assert!(result_val.starts_with("Error"));
+        }
+    }
+}
